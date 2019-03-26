@@ -26,7 +26,7 @@ var user_3 = [ 'Math', 'Chinois', 'Economie' ];
 var user_4 = [ 'Math', 'Physique', 'Chimie', 'Geo' ];
 
 //console.log(findSimlarities(preferences, user_4, 70).length);
-console.log(findSimlarities(preferences, user_5, 70).length);
+console.log(findSimlarities(preferences, user_1, 70));
 
 function findSimlarities(all_pref, edit_pref, threshold) {
   var cmb = null;
