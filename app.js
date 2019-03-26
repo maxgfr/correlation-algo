@@ -26,25 +26,27 @@ var user_3 = [ 'Math', 'Chinois', 'Economie' ];
 var user_4 = [ 'Math', 'Physique', 'Chimie', 'Geo' ];
 
 //console.log(findSimlarities(preferences, user_4, 70).length);
-console.log(findSimlarities(preferences, user_1, 70));
+findSimlarities(preferences, user_1, 70).then((res) => {console.log(res);})
 
 function findSimlarities(all_pref, edit_pref, threshold) {
-  var cmb = null;
-  var j = 0;
-  var name_bucket = {};
-  var final_res = {};
-  var list_percent_sim = [];
-  cmb = Combinatorics.power(all_pref);
-  cmb.forEach((a) =>{
-    var percent_sim = percent_of_similarities(a, edit_pref);
-    if(percent_sim > threshold) {
-      list_percent_sim.push({id_bucket: j, percent_sim: percent_sim});
-    }
-    //name_bucket[a] = j;
-    j++;
-    //console.log('% of similarities between ['+a.toString()+'] & the user : '+percent_sim+ '%.')
+  return new Promise(resolve => {
+    var cmb = null;
+    var j = 0;
+    var name_bucket = {};
+    var final_res = {};
+    var list_percent_sim = [];
+    cmb = Combinatorics.power(all_pref);
+    cmb.forEach((a) =>{
+      var percent_sim = percent_of_similarities(a, edit_pref);
+      if(percent_sim > threshold) {
+        list_percent_sim.push({id_bucket: j, percent_sim: percent_sim});
+      }
+      //name_bucket[a] = j;
+      j++;
+      //console.log('% of similarities between ['+a.toString()+'] & the user : '+percent_sim+ '%.')
+    });
+    resolve(list_percent_sim.sort(compare));
   });
-  return list_percent_sim.sort(compare);
 }
 
 function compare(a,b) {
