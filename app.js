@@ -93,8 +93,8 @@ var user_3 = [ 'Sc', 'Sp', 'Pe', 'Cr' ];
 
 //console.log(transfoUserArray(user_1));
 //findSimlarities(preferences, user_1, 70).then((res) => {console.log(res);})
-givePresetBucket(preferences, user_3, preset_pref, 80).then((res) => {console.log(res);})
-givePresetBucketWithString(preferences, transfoUserArray(user_3), preset_pref, 80).then((res) => {console.log(res);})
+//givePresetBucketWithString(preferences, transfoUserArray(user_3), preset_pref, 50).then((res) => {console.log(res);})
+givePresetBucket(preferences, user_3, preset_pref, 50).then((res) => {console.log(res);})
 
 function givePresetBucketWithString(all_pref, bucketId, preset_arr, threshold) {
   return new Promise(resolve => {
