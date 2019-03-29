@@ -26,18 +26,76 @@ var equivalence_preferences = {
   Design: 'De'
 }
 
-// Génération des utilisateurs
+var preset_pref = [
+  'PhMoArDe',
+  'PhFaPeLi',
+  'PhArMoMu',
+  'PhFoLiPe',
+  'MoArMuNe',
+  'MoArScFoDe',
+  'MoPhMuLiDe',
+  'MoScFoGa',
+  'GaMoScSpCr',
+  'GaScNeFoCr',
+  'GaPhMoSpLi',
+  'GaArMuLiDe',
+  'ArMoMuLiDe',
+  'ArPhPeLiFo',
+  'ArMoPh',
+  'ArScFoFa',
+  'FaLiPhArDe',
+  'FaGaLiBuDe',
+  'FaPhMuPeLi',
+  'FaPePhLiNe',
+  'MuGaSpLi',
+  'MuPhFaDeLi',
+  'MuArMoPhFo',
+  'MuPhGaPe',
+  'ScArBuCr',
+  'ScGaMoArCr',
+  'ScGaSpNeBu',
+  'ScSpCr',
+  'SpNeLiFa',
+  'SpPhPeFoBu',
+  'SpGaNeBu',
+  'SpFaPhScLi',
+  'PePhArDe',
+  'PeGaFoNe',
+  'PePhMoLiBu',
+  'PeLiFaPh',
+  'LiFaArPh',
+  'LiFoSpPh',
+  'LiFoMoNe',
+  'LiBuNeSpFo',
+  'FoPhSpPe',
+  'FoBuCrPhSc',
+  'FoLiSpPhBu',
+  'NeDeBuArMo',
+  'NePeLiFa',
+  'NeFaLiPh',
+  'NeCrBuSpGa',
+  'BuNeScCr',
+  'BuCrNeSpGa',
+  'BuScArFa',
+  'BuSpGaNePh',
+  'CrBuGaMo',
+  'CrScGaMoBu',
+  'CrPhSpBuSc',
+  'DePhArLi',
+  'DeNePhAr',
+  'DePhMoFaLi',
+  'DePhMoFa'
+];
+
 var user_1 = [ 'Ph', 'Mo', 'Ga', 'Ar', 'Fa' ];
 var user_2 = [ 'Li', 'Fo', 'Ne' ];
 var user_3 = [ 'Sc', 'Sp', 'Pe', 'Cr' ];
 
-var preset_pref = [ 'CrFoScSp', 'PhMoArCr', 'FaFoPh'];
-
 //console.log(transfoUserArray(user_1));
 //findSimlarities(preferences, user_1, 70).then((res) => {console.log(res);})
-givePresetBucket(preferences, user_1, preset_pref).then((res) => {console.log(res);})
+givePresetBucket(preferences, user_3, preset_pref, 20).then((res) => {console.log(res);})
 
-function givePresetBucket(all_pref, edit_pref, preset_arr) {
+function givePresetBucket(all_pref, edit_pref, preset_arr, threshold) {
   return new Promise(resolve => {
     all_pref = all_pref.sort();
     edit_pref = edit_pref.sort();
@@ -51,22 +109,13 @@ function givePresetBucket(all_pref, edit_pref, preset_arr) {
     var cmb = Combinatorics.power(all_pref);
     cmb.forEach((a) =>{
       var percent_sim = percent_of_similarities(a, edit_pref);
-      if(new_array_preset_classify.includes(transfoUserArray(a))) {
+      if(new_array_preset_classify.includes(transfoUserArray(a)) && percent_sim >= threshold) {
         list_preset.push({id_bucket: transfoUserArray(a), percent_sim: percent_sim});
       }
       //console.log('% of similarities between ['+a.toString()+'] & the user : '+percent_sim+ '%.')
     });
     resolve(list_preset.sort(compare));
   });
-}
-
-function transfoUserArray(arr_usr) {
-  var new_arr = arr_usr.sort();
-  var string = '';
-  for(var i=0; i<new_arr.length; i++) {
-    string += new_arr[i];
-  }
-  return string;
 }
 
 function findSimlarities(all_pref, edit_pref, threshold) {
@@ -77,13 +126,22 @@ function findSimlarities(all_pref, edit_pref, threshold) {
     var cmb = Combinatorics.power(all_pref);
     cmb.forEach((a) =>{
       var percent_sim = percent_of_similarities(a, edit_pref);
-      if(percent_sim > threshold) {
+      if(percent_sim >= threshold) {
         list_percent_sim.push({id_bucket: transfoUserArray(a), percent_sim: percent_sim});
       }
       //console.log('% of similarities between ['+a.toString()+'] & the user : '+percent_sim+ '%.')
     });
     resolve(list_percent_sim.sort(compare));
   });
+}
+
+function transfoUserArray(arr_usr) {
+  var new_arr = arr_usr.sort();
+  var string = '';
+  for(var i=0; i<new_arr.length; i++) {
+    string += new_arr[i];
+  }
+  return string;
 }
 
 function compare(a,b) {
