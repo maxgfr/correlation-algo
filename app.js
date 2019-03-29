@@ -1,48 +1,85 @@
 var Combinatorics = require('js-combinatorics');
 
-// Génération des préférences
 var preferences = [
-  'Math',
-  'Physique',
-  'Chimie',
-  'Français',
-  'Anglais',
-  'Chinois',
-  'Japonais',
-  'Geo',
-  'Histoire',
-  'Sport',
-  'Musique',
-  'Latin',
-  'Grec',
-  'Italien',
-  'Economie'
+  'Ph', 'Mo', 'Ga',
+  'Ar', 'Fa', 'Mu',
+  'Sc', 'Sp', 'Pe',
+  'Li', 'Fo', 'Ne',
+  'Bu', 'Cr', 'De'
 ];
 
-// Génération des utilisateurs
-var user_1 = [ 'Math', 'Physique', 'Français', 'Japonais', 'Sport' ];
-var user_2 = [ 'Anglais', 'Latin', 'Grec' ];
-var user_3 = [ 'Math', 'Chinois', 'Economie' ];
-var user_4 = [ 'Math', 'Physique', 'Chimie', 'Geo' ];
+var equivalence_preferences = {
+  Photo: 'Ph',
+  Movies: 'Mo',
+  Gaming: 'Ga',
+  Arts: 'Ar',
+  Fashion: 'Fa',
+  Music: 'Mu',
+  Science: 'Sc',
+  Sports: 'Sp',
+  Pets: 'Pe',
+  Lifestyle: 'Li',
+  Food: 'Fo',
+  News: 'Ne',
+  Business: 'Bu',
+  Crypto: 'Cr',
+  Design: 'De'
+}
 
-//console.log(findSimlarities(preferences, user_4, 70).length);
-findSimlarities(preferences, user_1, 70).then((res) => {console.log(res);})
+// Génération des utilisateurs
+var user_1 = [ 'Ph', 'Mo', 'Ga', 'Ar', 'Fa' ];
+var user_2 = [ 'Li', 'Fo', 'Ne' ];
+var user_3 = [ 'Sc', 'Sp', 'Pe', 'Cr' ];
+
+var preset_pref = [ 'CrFoScSp', 'PhMoArCr', 'FaFoPh'];
+
+//console.log(transfoUserArray(user_1));
+//findSimlarities(preferences, user_1, 70).then((res) => {console.log(res);})
+givePresetBucket(preferences, user_1, preset_pref).then((res) => {console.log(res);})
+
+function givePresetBucket(all_pref, edit_pref, preset_arr) {
+  return new Promise(resolve => {
+    all_pref = all_pref.sort();
+    edit_pref = edit_pref.sort();
+    var new_array_preset_classify = [];
+    for(var i=0; i<preset_arr.length; i++) {
+      var upperCaseArray = preset_arr[i].split(/(?=[A-Z])/);
+      upperCaseArray.sort();
+      new_array_preset_classify.push(upperCaseArray.join(''));
+    }
+    var list_preset = [];
+    var cmb = Combinatorics.power(all_pref);
+    cmb.forEach((a) =>{
+      var percent_sim = percent_of_similarities(a, edit_pref);
+      if(new_array_preset_classify.includes(transfoUserArray(a))) {
+        list_preset.push({id_bucket: transfoUserArray(a), percent_sim: percent_sim});
+      }
+      //console.log('% of similarities between ['+a.toString()+'] & the user : '+percent_sim+ '%.')
+    });
+    resolve(list_preset.sort(compare));
+  });
+}
+
+function transfoUserArray(arr_usr) {
+  var new_arr = arr_usr.sort();
+  var string = '';
+  for(var i=0; i<new_arr.length; i++) {
+    string += new_arr[i];
+  }
+  return string;
+}
 
 function findSimlarities(all_pref, edit_pref, threshold) {
   return new Promise(resolve => {
-    var cmb = null;
-    var j = 0;
-    var name_bucket = {};
-    var final_res = {};
+    all_pref = all_pref.sort();
+    edit_pref = edit_pref.sort();
     var list_percent_sim = [];
-    cmb = Combinatorics.power(all_pref);
+    var cmb = Combinatorics.power(all_pref);
     cmb.forEach((a) =>{
       var percent_sim = percent_of_similarities(a, edit_pref);
       if(percent_sim > threshold) {
-        list_percent_sim.push({id_bucket: j, percent_sim: percent_sim});
+        list_percent_sim.push({id_bucket: transfoUserArray(a), percent_sim: percent_sim});
       }
-      //name_bucket[a] = j;
-      j++;
       //console.log('% of similarities between ['+a.toString()+'] & the user : '+percent_sim+ '%.')
     });
     resolve(list_percent_sim.sort(compare));
