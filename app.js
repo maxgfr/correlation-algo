@@ -93,7 +93,32 @@ var user_3 = [ 'Sc', 'Sp', 'Pe', 'Cr' ];
 
 //console.log(transfoUserArray(user_1));
 //findSimlarities(preferences, user_1, 70).then((res) => {console.log(res);})
-givePresetBucket(preferences, user_3, preset_pref, 20).then((res) => {console.log(res);})
+givePresetBucket(preferences, user_3, preset_pref, 80).then((res) => {console.log(res);})
+givePresetBucketWithString(preferences, transfoUserArray(user_3), preset_pref, 80).then((res) => {console.log(res);})
+
+function givePresetBucketWithString(all_pref, bucketId, preset_arr, threshold) {
+  return new Promise(resolve => {
+    all_pref = all_pref.sort();
+    var edit_pref = bucketId.split(/(?=[A-Z])/);
+    edit_pref = edit_pref.sort();
+    var new_array_preset_classify = [];
+    for(var i=0; i<preset_arr.length; i++) {
+      var upperCaseArray = preset_arr[i].split(/(?=[A-Z])/);
+      upperCaseArray.sort();
+      new_array_preset_classify.push(upperCaseArray.join(''));
+    }
+    var list_preset = [];
+    var cmb = Combinatorics.power(all_pref);
+    cmb.forEach((a) =>{
+      var percent_sim = percent_of_similarities(a, edit_pref);
+      if(new_array_preset_classify.includes(transfoUserArray(a)) && percent_sim >= threshold) {
+        list_preset.push({id_bucket: transfoUserArray(a), percent_sim: percent_sim});
+      }
+      //console.log('% of similarities between ['+a.toString()+'] & the user : '+percent_sim+ '%.')
+    });
+    resolve(list_preset.sort(compare));
+  });
+}
 
 function givePresetBucket(all_pref, edit_pref, preset_arr, threshold) {
   return new Promise(resolve => {
