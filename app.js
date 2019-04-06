@@ -91,10 +91,39 @@ var user_1 = [ 'Ph', 'Mo', 'Ga', 'Ar', 'Fa' ];
 var user_2 = [ 'Li', 'Fo', 'Ne' ];
 var user_3 = [ 'Sc', 'Sp', 'Pe', 'Cr' ];
 
+var mother_correspondance = {
+  Ph: 'Image',
+  Mo: 'Image',
+  Ga: 'Ludique',
+  Ar: 'Image',
+  Fa: 'Lifestyle',
+  Mu: 'Lifestyle',
+  Sc: 'Ludique',
+  Sp: 'Ludique',
+  Pe: 'Lifestyle',
+  Li: 'Lifestyle',
+  Fo: 'Lifestyle',
+  Ne: 'Actualite',
+  Bu: 'Actualite',
+  Cr: 'Actualite',
+  De: 'Image'
+}
+
 //console.log(transfoUserArray(user_1));
 //findSimlarities(preferences, user_1, 70).then((res) => {console.log(res);})
-//givePresetBucketWithString(preferences, transfoUserArray(user_3), preset_pref, 50).then((res) => {console.log(res);})
-givePresetBucket(preferences, user_3, preset_pref, 50).then((res) => {console.log(res);})
+//givePresetBucketWithString(preferences, transfoUserArray(user_3), preset_pref, 20 ).then((res) => {console.log(res);})
+//givePresetBucket(preferences, user_3, preset_pref, 20).then((res) => {console.log(res.length);})
+//console.log(motherBucker(mother_correspondance, user_3))
+
+function motherBucker (mother_correspondance, array_pref) {
+  var bucket_to_publish = [];
+  for(var i=0; i<array_pref.length; i++) {
+    if(!bucket_to_publish.includes(mother_correspondance[array_pref[i]])) {
+      bucket_to_publish.push(mother_correspondance[array_pref[i]]);
+    }
+  }
+  return bucket_to_publish;
+}
 
 function givePresetBucketWithString(all_pref, bucketId, preset_arr, threshold) {
   return new Promise(resolve => {
