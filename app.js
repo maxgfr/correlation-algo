@@ -1,4 +1,5 @@
 var Combinatorics = require('js-combinatorics');
+var fs = require("fs");
 
 var preferences = [
   'Ph', 'Mo', 'Ga',
@@ -110,10 +111,39 @@ var mother_correspondance = {
 }
 
 //console.log(transfoUserArray(user_1));
-//findSimlarities(preferences, user_1, 70).then((res) => {console.log(res);})
+findSimlarities(preferences, user_1, 70).then((res) => {console.log(res);})
 //givePresetBucketWithString(preferences, transfoUserArray(user_3), preset_pref, 20 ).then((res) => {console.log(res);})
 //givePresetBucket(preferences, user_3, preset_pref, 20).then((res) => {console.log(res.length);})
 //console.log(motherBucker(mother_correspondance, user_3))
+//createJsonPrefCombinatorics(preferences, './all_pref.json');
+//readJsonPrefCombinatorics('./all_pref.json').then((res) => {console.log(res);});
+
+function readJsonPrefCombinatorics(name_json) {
+  return new Promise(resolve => {
+    fs.readFile(name_json, 'utf-8', (err, data) => {
+      if (err) {
+          console.error(err);
+          return;
+      };
+      resolve(JSON.parse(data));
+    });
+  });
+}
+
+function createJsonPrefCombinatorics(all_pref, name_json) {
+  var cmb = Combinatorics.power(all_pref);
+  var res = [];
+  cmb.forEach((a) =>{
+    res.push(a);
+  });
+  fs.writeFile(name_json, JSON.stringify(res, null, 4), (err) => {
+    if (err) {
+        console.error(err);
+        return;
+    };
+    console.log("File has been created");
+  });
+}
 
 function motherBucker (mother_correspondance, array_pref) {
   var bucket_to_publish = [];
