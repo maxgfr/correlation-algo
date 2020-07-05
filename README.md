@@ -1,2 +1,10 @@
 # correlation_algo
-Algorithm of correlation 
+
+Correlation algorithm matching users thank to categories 
+
+## To test it
+
+```
+npm install
+npm start
+```
