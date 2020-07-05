@@ -1,5 +1,5 @@
 {
-  "name": "correlation_algo",
+  "name": "correlation-algo",
   "version": "1.0.0",
   "description": "Correlation algorithm",
   "main": "app.js",
