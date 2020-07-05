@@ -1,6 +1,6 @@
-# correlation_algo
+# correlation-algo
 
-Correlation algorithm matching users thank to categories 
+Correlation algorithm matching users thank to categories
 
 ## To test it
 
